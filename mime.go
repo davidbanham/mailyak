@@ -163,8 +163,12 @@ func (m *MailYak) writeBody(w io.Writer, boundary string) error {
 		_, err = part.Write(buf.Bytes())
 	}
 
-	writePart("text/plain", m.plain.Bytes())
-	writePart("text/html", m.html.Bytes())
+	if m.plain.Len() > 0 {
+		writePart("text/plain", m.plain.Bytes())
+	}
+	if m.html.Len() > 0 {
+		writePart("text/html", m.html.Bytes())
+	}
 
 	// If closing the alt fails, and there's not already an error set, return the
 	// close error.
